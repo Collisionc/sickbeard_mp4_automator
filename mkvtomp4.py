@@ -525,9 +525,12 @@ class MkvtoMp4:
 
             self.log.info("Audio detected for stream #%s: %s [%s]." % (a.index, a.codec, a.metadata['language']))
 
-            if self.output_extension in valid_tagging_extensions and a.codec.lower() == 'truehd' and self.ignore_truehd:  # Need to skip it early so that it flags the next track as default.
-                self.log.info("MP4 containers do not support truehd audio, and converting it is inconsistent due to video/audio sync issues. Skipping stream %s as typically the 2nd audio track is the AC3 core of the truehd stream." % a.index )
-                continue
+            if self.output_extension in valid_tagging_extensions and ( a.codec.lower() == 'truehd' or a.codec.startswith( 'pcm' ) ):
+                if self.ignore_truehd:
+                    self.log.info("MP4 containers do not support truehd audio, and converting it is inconsistent due to video/audio sync issues. Skipping stream %s as typically the 2nd audio track is the AC3 core of the truehd stream." % a.index )
+                    continue
+                else:
+                    self.audio_copyoriginal = False
 
             if 'ac3' in a.codec.lower() and self.audio_copyoriginal: # EAC3 requires the moov atom to be at the end of the file, while ac3 requires delay_moov.
                                          # https://patchwork.ffmpeg.org/patch/11972/  -- recently added in error checking for this

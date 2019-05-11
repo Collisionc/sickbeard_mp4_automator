@@ -82,7 +82,7 @@ class ReadSettings:
                         'audio-language': '',
                         'audio-default-language': '',
                         'audio-codec': 'ac3',
-                        'ignore-trudhd': 'True',
+                        'ignore-truehd': 'True',
                         'audio-filter': '',
                         'audio-channel-bitrate': '256',
                         'audio-copy-original': 'False',
@@ -301,7 +301,7 @@ class ReadSettings:
             self.output_format = 'mov'
         self.delete = config.getboolean(section, "delete_original")  # Delete original file
         self.relocate_moov = config.getboolean(section, "relocate_moov")  # Relocate MOOV atom to start of file
-        self.ignore_truehd = config.getboolean(section, "ignore-trudhd")  # Ignore truehd
+        self.ignore_truehd = config.getboolean(section, "ignore-truehd")  # Ignore truehd
         self.acodec = config.get(section, "audio-codec").lower()  # Gets the desired audio codec, if no valid codec selected, default to AC3
         if self.acodec == '':
             self.acodec == ['ac3']

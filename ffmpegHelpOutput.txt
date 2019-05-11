@@ -1,4 +1,4 @@
-Hyper fast Audio and Video encoder
+ Hyper fast Audio and Video encoder
 usage: ffmpeg [options] [[infile options] -i infile]... {[outfile options] outfile}...
 
 Getting help:
