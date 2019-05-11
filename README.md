@@ -1,6 +1,6 @@
 Same as the original with better Nvidia support and some other things to make automation easier, my changes are as follows:
 
-Nightly builds from https://ffmpeg.zeranoe.com/builds/ will work with all added options **EXCEPT enable_opencl_hdr_sdr_tonemapping -- You MUST compile your own ffmpeg to use this option.** If you are on windows I recommend using https://github.com/jb-alvarado/media-autobuild_suite "full build" for this purpose. The computer that does the compiling must have a OpenCL compliant video card in it.
+Nightly builds from https://ffmpeg.zeranoe.com/builds/ (Windows) or https://www.johnvansickle.com/ffmpeg/ (linux) will work with all added options **EXCEPT enable_opencl_hdr_sdr_tonemapping -- You MUST compile your own ffmpeg to use this option.** If you are on windows I recommend using https://github.com/jb-alvarado/media-autobuild_suite "full build" for this purpose -- unfortunately I'm not entirely sure of a decent option for linux at the moment. The computer that does the compiling must have a OpenCL compliant video card in it.
 
 NVDEC only supports pixel formats with 420 chroma, so it will not work with yuv444p, yuv422p, etc. When these formats are encountered, NVDEC will be disabled. 
 
