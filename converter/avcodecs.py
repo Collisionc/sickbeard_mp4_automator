@@ -982,7 +982,7 @@ class NVEncH265(H265Codec):
     """
     Nvidia H.265/AVC video codec.
     """
-    codec_name = 'nvenc_h265'
+    codec_name = 'h265_nvenc'
     ffmpeg_codec_name = 'nvenc_hevc'
 
     encoder_options = H265Codec.encoder_options.copy()
