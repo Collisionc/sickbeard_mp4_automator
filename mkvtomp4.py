@@ -973,11 +973,6 @@ class MkvtoMp4:
             del options['video']['bitrate']
             options['video']['crf'] = self.vcrf
 
-        options['postopts'].extend([ '-max_muxing_queue_size', '2048' ] )  
-        # Some ffmpeg filters are in a state of internal API transition with how they handle certain magic
-        # that I don't understand, but read about and nodded about on the ffmpeg mailing list.
-        # Allowing a higher queue size fixes whatever wizardry is happening, and shouldn't be needed in a year or so. 02/11/2018
-
         if use_overlay_stream:
             options['preopts'].remove( '-fix_sub_duration' ) #fix_sub_duration really screws up the duration of overlaid "picture" subtitles,
                            #as they stay on the screen for less than a second. This doesn't have any negative consequences that I've noticed.
