@@ -380,6 +380,9 @@ class MkvtoMp4:
         return {'y': info.video.video_height,
                 'x': info.video.video_width}
 
+        return {'y': 0,
+                'x': 0}
+
     # Estimate the video bitrate
     def estimateVideoBitrate(self, info):
         total_bitrate = info.format.bitrate
@@ -561,12 +564,6 @@ class MkvtoMp4:
                     self.log.debug("Filter: %s." % self.iOS_filter)
                     self.log.debug("Bitrate: %s." % iOSbitrate)
                     self.log.debug("Language: %s." % a.metadata['language'])
-                    if l == 0:
-                        disposition = 'default'
-                        self.log.info("Audio track is number %s setting disposition to %s" % (str(l), disposition))
-                    else:
-                        disposition = 'none'
-                        self.log.info("Audio track is number %s setting disposition to %s" % (str(l), disposition))
                     iosdata = {
                         'map': a.index,
                         'codec': self.iOS[0],
@@ -575,7 +572,7 @@ class MkvtoMp4:
                         'samplerate': self.sample_rate,
                         'filter': self.iOS_filter,
                         'language': a.metadata['language'],
-                        'disposition': disposition,
+                        'disposition': 'none',
                         }
                     if not self.iOSLast:
                         audio_settings.update({l: iosdata})
@@ -623,14 +620,6 @@ class MkvtoMp4:
                     self.log.debug("Not creating any additional iOS audio streams.")
                     self.iOS = False
 
-                # Set first track as default disposition
-                if l == 0:
-                    disposition = 'default'
-                    self.log.info("Audio Track is number %s setting disposition to %s" % (a.index, disposition))
-                else:
-                    disposition = 'none'
-                    self.log.info("Audio Track is number %s setting disposition to %s" % (a.index, disposition))
-
                 audio_settings.update({l: {
                     'map': a.index,
                     'codec': acodec,
@@ -639,7 +628,7 @@ class MkvtoMp4:
                     'filter': afilter,
                     'samplerate': self.sample_rate,
                     'language': a.metadata['language'],
-                    'disposition': disposition,
+                    'disposition': 'none',
                 }})
 
                 if acodec == 'copy' and a.codec == 'aac' and self.aac_adtstoasc:
@@ -651,7 +640,6 @@ class MkvtoMp4:
 
                 #Add the iOS track last instead
                 if self.iOSLast and iosdata:
-                    iosdata['disposition'] = 'none'
                     audio_settings.update({l: iosdata})
                     l += 1
 
@@ -673,6 +661,16 @@ class MkvtoMp4:
                         self.log.debug("Removing language from whitelist to prevent multiple tracks of the same: %s." % a.metadata['language'])
                     except:
                         self.log.error("Unable to remove language %s from whitelist." % a.metadata['language'])
+
+        # Audio Default
+        if len(audio_settings) > 0 and self.adl:
+            try:
+                default_track = [x for x in audio_settings.values() if x['language'] == self.adl][0]
+                default_track['disposition'] = 'default'
+            except:
+                audio_settings[0]['disposition'] = 'default'
+        else:
+            self.log.error("Audio language array is empty.")
 
         # Subtitle streams
         subtitle_settings = {}
@@ -767,6 +765,7 @@ class MkvtoMp4:
                         'codec': self.scodec[0],
                         'language': s.metadata['language'],
                         'encoding': self.subencoding,
+                        'disposition': 'none',
                         'forced': s.sub_forced,
                         'default': s.sub_default,
                         'burn_in_forced_subs': self.burn_in_forced_subs,
@@ -918,6 +917,7 @@ class MkvtoMp4:
                                         'map': 0,
                                         'codec': 'mov_text',
                                         'language': lang,
+                                        'disposition':'none',
                                         'burn_in_forced_subs': self.burn_in_forced_subs,
                                         'subtitle_burn': os.path.join(dirName, fname)
                                         }})
@@ -941,6 +941,16 @@ class MkvtoMp4:
 
                             else:
                                 self.log.info("Ignoring %s external subtitle stream due to language %s." % (fname, lang))
+
+        # Subtitle Default
+        if len(subtitle_settings) > 0 and self.sdl:
+            try:
+                default_track = [x for x in subtitle_settings.values() if x['language'] == self.sdl][0]
+                default_track['disposition'] = 'default'
+            except:
+                subtitle_settings[0]['disposition'] = 'default'
+        else:
+            self.log.warning("Subtitle language array is empty.")
 
         # Collect all options
         options = {
@@ -1115,6 +1125,11 @@ class MkvtoMp4:
         self.log.debug("Input extension: %s." % input_extension)
         self.log.debug("Output directory: %s." % output_dir)
         self.log.debug("Output file: %s." % outputfile)
+
+        if self.output_extension == input_extension and len([x for x in [options['video']] + [x for x in options['audio'].values()] + [x for x in options['subtitle'].values()] if x['codec'] != 'copy']) == 0:
+            self.log.info("Input and output extensions match and every codec is copy, this file probably doesn't need conversion, returning.")
+            self.log.info(inputfile)
+            return inputfile, ""
 
         if os.path.abspath(inputfile) == os.path.abspath(outputfile):
             self.log.debug("Inputfile and outputfile are the same.")

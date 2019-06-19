@@ -149,6 +149,7 @@ class SubtitleCodec(BaseCodec):
         'source': int,
         'path': str,
         'encoding': str,
+        'disposition': str,
         'subtitle_burn': str,
         'burn_in_forced_subs': bool
     }
@@ -196,6 +197,8 @@ class SubtitleCodec(BaseCodec):
         stream = str(stream)
         if 'map' in safe:
             optlist.extend(['-map', s + ':' + str(safe['map'])])
+        if 'disposition' in safe:
+            optlist.extend(['-disposition:s:' + stream, str(safe['disposition'])])
         if 'path' in safe:
             optlist.extend(['-i', str(safe['path'])])
         if 'default' in safe:
@@ -860,6 +863,20 @@ class NVEncH264(H264Codec):
                 optlist.extend(['-vf', 'scale=trunc((oh*a)/2)*2:%s' % (safe['hscale'])])
         return optlist
 
+class VideotoolboxEncH264(H264Codec):
+    """
+    Videotoolbox H.264/AVC video codec.
+    """
+    codec_name = 'h264_videotoolbox'
+    ffmpeg_codec_name = 'h264_videotoolbox'
+
+
+class OMXH264(H264Codec):
+    """
+    OMX H.264/AVC video codec.
+    """
+    codec_name = 'h264_omx'
+    ffmpeg_codec_name = 'h264_omx'
 
 class H264VAAPI(H264Codec):
     """
@@ -1191,7 +1208,7 @@ audio_codec_list = [
 video_codec_list = [
     VideoNullCodec, VideoCopyCodec, TheoraCodec, H264Codec, H264QSV, HEVCQSV, H265Codec,
     DivxCodec, Vp8Codec, H263Codec, FlvCodec, Mpeg1Codec, NVEncH264, NVEncH265,
-    Mpeg2Codec, H264VAAPI
+    Mpeg2Codec, H264VAAPI, OMXH264, VideotoolboxEncH264
 ]
 
 subtitle_codec_list = [
