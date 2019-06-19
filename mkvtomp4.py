@@ -971,6 +971,7 @@ class MkvtoMp4:
                 'profile': vprofile,
                 'pix_fmt': pix_fmt,
                 'color_space_convert': None,
+                'filter_complex': None
             },
             'audio': audio_settings,
             'subtitle': subtitle_settings,
@@ -1028,9 +1029,9 @@ class MkvtoMp4:
                         del subtitle_settings[0]
         elif use_overlay_stream:
             if vwidth == None:
-                options['video']['filter_complex'] = "[0:v][0:%s]overlay[video]" %s ( overlay_stream )
+                options['video']['filter_complex'] = "[0:v][0:%s]overlay[video]" % ( overlay_stream )
             else:
-                options['video']['filter_complex'] = "[video][0:%s]overlay[video]" %s ( overlay_stream )
+                options['video']['filter_complex'] = "[video][0:%s]overlay[video]" % ( overlay_stream )
 
         nvenc_cuvid_codecs = { "h264", "mjpeg", "mpeg1video", "mpeg2video", "mpeg4", "vc1", "vp8", "hevc", "vp9" }
 
