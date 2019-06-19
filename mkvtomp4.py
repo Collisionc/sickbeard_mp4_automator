@@ -344,7 +344,7 @@ class MkvtoMp4:
     def validSource(self, inputfile):
         input_extension = self.parseFile(inputfile)[2]
         if input_extension.lower() == "m2ts" and not self.handle_m2ts_files:
-            self.log.debug( "%2 is a m2ts file and handle_m2ts_files is not enabled" % inputfile )
+            self.log.debug( "%s is a m2ts file and handle_m2ts_files is not enabled" % inputfile )
             return False
         # Make sure the input_extension is some sort of recognized extension, and that the file actually exists
         if (input_extension.lower() in valid_input_extensions or input_extension.lower() in valid_output_extensions):

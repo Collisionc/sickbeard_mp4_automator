@@ -1,4 +1,4 @@
- Hyper fast Audio and Video encoder
+Hyper fast Audio and Video encoder
 usage: ffmpeg [options] [[infile options] -i infile]... {[outfile options] outfile}...
 
 Getting help:
@@ -3274,6 +3274,7 @@ SMPTE 302M Decoder AVOptions:
 
 TIFF decoder AVOptions:
   -subimage          <boolean>    .D.V..... decode subimage instead if available (default false)
+  -thumbnail         <boolean>    .D.V..... decode embedded thumbnail subimage instead if available (default false)
   -page              <int>        .D.V..... page number of multi-page image to decode (starting from 1) (from 0 to 65535) (default 0)
 
 V210 Decoder AVOptions:
@@ -3366,7 +3367,8 @@ vplayer decoder AVOptions:
   -keep_ass_markup   <boolean>    .D...S... Set if ASS tags must be escaped (default false)
 
 libdav1d decoder AVOptions:
-  -tilethreads       <int>        .D.V..... Tile threads (from 1 to 64) (default 1)
+  -tilethreads       <int>        .D.V..... Tile threads (from 0 to 64) (default 0)
+  -framethreads      <int>        .D.V..... Frame threads (from 0 to 256) (default 0)
   -filmgrain         <boolean>    .D.V..... Apply Film Grain (default true)
 
 libfdk-aac decoder AVOptions:
@@ -6261,6 +6263,7 @@ anlmdn AVOptions:
      i                            ..F.A.... input
      o                            ..F.A.... output
      n                            ..F.A.... noise
+  m                 <float>      ..F.A.... set smooth factor (from 1 to 15) (default 11)
 
 apad AVOptions:
   packet_size       <int>        ..F.A.... set silence packet size (from 0 to INT_MAX) (default 4096)
@@ -7721,6 +7724,7 @@ bwdif AVOptions:
 chromahold AVOptions:
   color             <color>      ..FV..... set the chromahold key color (default "black")
   similarity        <float>      ..FV..... set the chromahold similarity value (from 0.01 to 1) (default 0.01)
+  blend             <float>      ..FV..... set the chromahold blend value (from 0 to 1) (default 0)
   yuv               <boolean>    ..FV..... color parameter is in yuv instead of rgb (default false)
 
 chromakey AVOptions:
@@ -8234,6 +8238,11 @@ delogo AVOptions:
   w                 <int>        ..FV..... set logo width (from -1 to INT_MAX) (default -1)
   h                 <int>        ..FV..... set logo height (from -1 to INT_MAX) (default -1)
   show              <boolean>    ..FV..... show delogo area (default false)
+
+derain AVOptions:
+  dnn_backend       <int>        ..FV..... DNN backend (from 0 to 1) (default native)
+     native                       ..FV..... native backend flag
+  model             <string>     ..FV..... path to model file
 
 deshake AVOptions:
   x                 <int>        ..FV..... set x for the rectangular search area (from -1 to INT_MAX) (default -1)
@@ -9104,6 +9113,13 @@ negate AVOptions:
   negate_alpha      <boolean>    ..FV..... (default false)
 
 nlmeans AVOptions:
+  s                 <double>     ..FV..... denoising strength (from 1 to 30) (default 1)
+  p                 <int>        ..FV..... patch size (from 0 to 99) (default 7)
+  pc                <int>        ..FV..... patch size for chroma planes (from 0 to 99) (default 0)
+  r                 <int>        ..FV..... research window (from 0 to 99) (default 15)
+  rc                <int>        ..FV..... research window for chroma planes (from 0 to 99) (default 0)
+
+nlmeans_opencl AVOptions:
   s                 <double>     ..FV..... denoising strength (from 1 to 30) (default 1)
   p                 <int>        ..FV..... patch size (from 0 to 99) (default 7)
   pc                <int>        ..FV..... patch size for chroma planes (from 0 to 99) (default 0)
@@ -10019,7 +10035,7 @@ AVDCT AVOptions:
      simpleauto                   ED.V..... experimental / for debugging
 
 sr AVOptions:
-  dnn_backend       <flags>      ..FV..... DNN backend used for model execution (default 0)
+  dnn_backend       <int>        ..FV..... DNN backend used for model execution (from 0 to 1) (default native)
      native                       ..FV..... native backend flag
   scale_factor      <int>        ..FV..... scale factor for SRCNN model (from 2 to 4) (default 2)
   model             <string>     ..FV..... path to model file specifying network architecture and its parameters
@@ -10755,6 +10771,10 @@ weave AVOptions:
 
 xbr AVOptions:
   n                 <int>        ..FV..... set scale factor (from 2 to 4) (default 3)
+
+xmedian AVOptions:
+  inputs            <int>        ..FV..... set number of inputs (from 3 to 255) (default 3)
+  planes            <int>        ..FV..... set planes to filter (from 0 to 15) (default 15)
 
 xstack AVOptions:
   inputs            <int>        ..FV..... set number of inputs (from 2 to INT_MAX) (default 2)
@@ -11629,6 +11649,34 @@ showfreqs AVOptions:
      separate                     ..FV..... show each channel in own window
   minamp            <float>      ..FV..... set minimum amplitude (from FLT_MIN to 1e-06) (default 1e-06)
 
+showspatial AVOptions:
+  size              <image_size> ..FV..... set video size (default "512x512")
+  s                 <image_size> ..FV..... set video size (default "512x512")
+  win_size          <int>        ..FV..... set window size (from 1024 to 65536) (default 4096)
+  win_func          <int>        ..FV..... set window function (from 0 to 19) (default hann)
+     rect                         ..FV..... Rectangular
+     bartlett                     ..FV..... Bartlett
+     hann                         ..FV..... Hann
+     hanning                      ..FV..... Hanning
+     hamming                      ..FV..... Hamming
+     blackman                     ..FV..... Blackman
+     welch                        ..FV..... Welch
+     flattop                      ..FV..... Flat-top
+     bharris                      ..FV..... Blackman-Harris
+     bnuttall                     ..FV..... Blackman-Nuttall
+     bhann                        ..FV..... Bartlett-Hann
+     sine                         ..FV..... Sine
+     nuttall                      ..FV..... Nuttall
+     lanczos                      ..FV..... Lanczos
+     gauss                        ..FV..... Gauss
+     tukey                        ..FV..... Tukey
+     dolph                        ..FV..... Dolph-Chebyshev
+     cauchy                       ..FV..... Cauchy
+     parzen                       ..FV..... Parzen
+     poisson                      ..FV..... Poisson
+     bohman                       ..FV..... Bohman
+  overlap           <float>      ..FV..... set window overlap (from 0 to 1) (default 0.5)
+
 showspectrum AVOptions:
   size              <image_size> ..FV..... set video size (default "640x512")
   s                 <image_size> ..FV..... set video size (default "640x512")
@@ -11924,7 +11972,7 @@ av1_metadata_bsf AVOptions:
   -delete_padding    <boolean>    ...V....B Delete all Padding OBUs (default false)
 
 dump_extradata bsf AVOptions:
-  -freq              <int>        ...V....B When do dump extradata (from 0 to 1) (default k)
+  -freq              <int>        ...V....B When to dump extradata (from 0 to 1) (default k)
      k                            ...V....B
      keyframe                     ...V....B
      e                            ...V....B
@@ -13408,6 +13456,8 @@ IO... yuva422p12be           4            36
 IO... yuva422p12le           4            36
 IO... yuva444p12be           4            48
 IO... yuva444p12le           4            48
+IO... nv24                   3            24
+IO... nv42                   3            24
 File formats:
  D. = Demuxing supported
  .E = Muxing supported
@@ -14297,7 +14347,7 @@ Filters:
  ... amix              N->A       Audio mixing.
  ... amultiply         AA->A      Multiply two audio streams.
  ..C anequalizer       A->N       Apply high-order audio parametric multi band equalizer.
- TS. anlmdn            A->A       Reduce broadband noise from stream using Non-Local Means.
+ TSC anlmdn            A->A       Reduce broadband noise from stream using Non-Local Means.
  ... anull             A->A       Pass the source unchanged to the output.
  T.. apad              A->A       Pad audio with silence.
  ... aperms            A->A       Set permissions for the output audio frame.
@@ -14405,7 +14455,7 @@ Filters:
  TS. colorkey          V->V       Turns a certain color into transparency. Operates on RGB colors.
  ... colorkey_opencl   V->V       Turns a certain color into transparency. Operates on RGB colors.
  TS. colorhold         V->V       Turns a certain color range into gray. Operates on RGB colors.
- T.. colorlevels       V->V       Adjust the color levels.
+ TS. colorlevels       V->V       Adjust the color levels.
  TS. colormatrix       V->V       Convert color matrix.
  TS. colorspace        V->V       Convert between colorspaces.
  TS. convolution       V->V       Apply convolution filter.
@@ -14429,6 +14479,7 @@ Filters:
  ... deinterlace_qsv   V->V       QuickSync video deinterlacing
  ... dejudder          V->V       Remove judder produced by pullup.
  T.. delogo            V->V       Remove logo from input video.
+ T.. derain            V->V       Apply derain filter to the input.
  ... deshake           V->V       Stabilize shaky video.
  TS. despill           V->V       Despill video.
  ... detelecine        V->V       Apply an inverse telecine pattern.
@@ -14495,12 +14546,12 @@ Filters:
  TS. limiter           V->V       Limit pixels components to the specified range.
  ... loop              V->V       Loop video frames.
  TS. lumakey           V->V       Turns a certain luma into transparency.
- T.. lut               V->V       Compute and apply a lookup table to the RGB/YUV input video.
+ TS. lut               V->V       Compute and apply a lookup table to the RGB/YUV input video.
  TS. lut1d             V->V       Adjust colors using a 1D LUT.
  T.. lut2              VV->V      Compute and apply a lookup table from two video inputs.
  TS. lut3d             V->V       Adjust colors using a 3D LUT.
- T.. lutrgb            V->V       Compute and apply a lookup table to the RGB input video.
- T.. lutyuv            V->V       Compute and apply a lookup table to the YUV input video.
+ TS. lutrgb            V->V       Compute and apply a lookup table to the RGB input video.
+ TS. lutyuv            V->V       Compute and apply a lookup table to the YUV input video.
  TS. maskedclamp       VVV->V     Clamp first stream with second stream and third stream.
  TS. maskedmerge       VVV->V     Merge first stream with second stream using third stream as mask.
  TS. maskfun           V->V       Create Mask.
@@ -14512,8 +14563,9 @@ Filters:
  ... minterpolate      V->V       Frame rate conversion using Motion Interpolation.
  .S. mix               N->V       Mix video inputs.
  ... mpdecimate        V->V       Remove near-duplicate frames.
- T.. negate            V->V       Negate input video.
+ TS. negate            V->V       Negate input video.
  TS. nlmeans           V->V       Non-local means denoiser.
+ ... nlmeans_opencl    V->V       Non-local means denoiser through OpenCL
  T.. nnedi             V->V       Apply neural network edge directed interpolation intra-only deinterlacer.
  ... noformat          V->V       Force libavfilter not to use any of the specified pixel formats for the input to the next filter.
  TS. noise             V->V       Add noise.
@@ -14585,7 +14637,7 @@ Filters:
  ... sobel_opencl      V->V       Apply sobel operator
  ... split             V->N       Pass on the input to N video outputs.
  T.C spp               V->V       Apply a simple post processing filter.
- TS. sr                V->V       Apply DNN-based image super resolution to the input.
+ T.. sr                V->V       Apply DNN-based image super resolution to the input.
  ... ssim              VV->V      Calculate the SSIM between two video streams.
  .S. stereo3d          V->V       Convert video stereoscopic 3D view.
  ..C streamselect      N->N       Select video streams
@@ -14610,7 +14662,7 @@ Filters:
  ... transpose_opencl  V->V       Transpose input video
  ... trim              V->V       Pick one continuous section from the input, drop the rest.
  TS. unpremultiply     N->V       UnPreMultiply first stream with first plane of second stream.
- T.. unsharp           V->V       Sharpen or blur the input video.
+ TS. unsharp           V->V       Sharpen or blur the input video.
  ... unsharp_opencl    V->V       Apply unsharp mask to input video
  T.. uspp              V->V       Apply Ultra Simple / Slow Post-processing filter.
  T.. vaguedenoiser     V->V       Apply a Wavelet based Denoiser.
@@ -14628,6 +14680,7 @@ Filters:
  .S. waveform          V->V       Video waveform monitor.
  ... weave             V->V       Weave input video fields into frames.
  .S. xbr               V->V       Scale the input using xBR algorithm.
+ .S. xmedian           N->V       Pick median pixels from several video inputs.
  ... xstack            N->V       Stack video inputs into custom layout.
  TS. yadif             V->V       Deinterlace the input image.
  T.. yadif_cuda        V->V       Deinterlace CUDA frames
@@ -14663,6 +14716,7 @@ Filters:
  ..C concat            N->N       Concatenate audio and video streams.
  ... showcqt           A->V       Convert input audio to a CQT (Constant/Clamped Q Transform) spectrum video output.
  ... showfreqs         A->V       Convert input audio to a frequencies video output.
+ .S. showspatial       A->V       Convert input audio to a spatial video output.
  .S. showspectrum      A->V       Convert input audio to a spectrum video output.
  .S. showspectrumpic   A->V       Convert input audio to a spectrum video output single picture.
  ... showvolume        A->V       Convert input audio volume to video output.
