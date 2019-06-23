@@ -707,47 +707,72 @@ class MkvtoMp4:
                 continue
             desired_language_streams += 1
 
-            if self.burn_in_full_subs: # Generally the first sub works for full subs.
-                forced_sub = s.index
-                s.sub_forced = 1
-                subtitle_used = subtitle_number
-                break
-            elif s.sub_forced == 2 and s.sub_default == 1: ## Prefer subs that are flagged forced AND default by their disposition
-                forced_sub = s.index
-                subtitle_used = subtitle_number
-                break
-            elif s.sub_forced == 2: ## Prefer flagged subs next
-                forced_sub = s.index
-                subtitle_used = subtitle_number
-                break
-            elif s.sub_forced == 1: ## Go searching for forced subs that hang out in the title metadata
-                forced_sub = s.index
-                subtitle_used = subtitle_number
-                break
-            elif overrideLang == True: # If there is no audio stream in the desired language,
-                forced_sub = s.index   # burn in the first subtitle stream that matches the users language.  
-                subtitle_used = subtitle_number
-                s.sub_forced = 1
-                break
-            elif s.sub_force_guess:# Finally, throw a guess at it if there are 2 desired language subtitle streams.
-                s.sub_force_guess = s.sub_force_guess[:-3]
-                try:
-                    duration = datetime.datetime.strptime(s.sub_force_guess,'%H:%M:%S.%f')
-                    total_seconds = duration.second + ( duration.minute * 60 ) + ( duration.hour * 3600 )
-                    if total_seconds < shortest_duration_subtitle_stream:
-                        shortest_duration_subtitle_stream = total_seconds
-                        guessed_forced_sub = s.index
-                        guessed_subtitle_number = subtitle_number
-                    if total_seconds > longest_duration_subtitle_stream:
-                        longest_duration_subtitle_stream = total_seconds
-                except:
-                    self.log.info( "Couldn't use experimental forced subtitle duration. Probably due to odd time formatting - Attempted to parse time format from %s" % s.sub_force_guess )
+            if self.burn_in_forced_subs == True and self.burn_in_full_subs == False:
+                if s.sub_forced == 2 and s.sub_default == 1: ## Prefer subs that are flagged forced AND default by their disposition
+                    forced_sub = s.index
+                    subtitle_used = subtitle_number
+                    break
+                elif s.sub_forced == 2: ## Prefer flagged subs next
+                    forced_sub = s.index
+                    subtitle_used = subtitle_number
+                    break
+                elif s.sub_forced == 1: ## Go searching for forced subs that hang out in the title metadata
+                    forced_sub = s.index
+                    subtitle_used = subtitle_number
+                    break
+                elif s.sub_force_guess:# Finally, throw a guess at it if there are 2 desired language subtitle streams.
+                    total_seconds = 0
+                    s.sub_force_guess = s.sub_force_guess[:-3]
+                    try:
+                        duration = datetime.datetime.strptime(s.sub_force_guess,'%H:%M:%S.%f')
+                        total_seconds = duration.second + ( duration.minute * 60 ) + ( duration.hour * 3600 )
+                    except:
+                        self.log.info( "Couldn't use experimental subtitle duration. Probably due to odd time formatting - Attempted to parse time format from %s" % s.sub_force_guess )
+                        try:
+                            total_seconds = float( s.sub_force_guess )
+                        except:
+                            self.log.info("Attempt #2 failed for subtitle duration.")
+                    if total_seconds > 0:
+                        if total_seconds < shortest_duration_subtitle_stream:
+                            shortest_duration_subtitle_stream = total_seconds
+                            guessed_forced_sub = s.index
+                            guessed_subtitle_number = subtitle_number
+                        if total_seconds > longest_duration_subtitle_stream:
+                            longest_duration_subtitle_stream = total_seconds
+            elif self.burn_in_full_subs == True:
+                if s.sub_force_guess:
+                    total_seconds = 0
+                    s.sub_force_guess = s.sub_force_guess[:-3]
+                    try:
+                        duration = datetime.datetime.strptime(s.sub_force_guess,'%H:%M:%S.%f')
+                        total_seconds = duration.second + ( duration.minute * 60 ) + ( duration.hour * 3600 )
+                    except:
+                        self.log.info( "Couldn't use experimental subtitle duration. Probably due to odd time formatting - Attempted to parse time format from %s" % s.sub_force_guess )
+                        try:
+                            total_seconds = float( s.sub_force_guess )
+                        except:
+                            self.log.info("Attempt #2 failed for subtitle duration.")
+                    if total_seconds > 0:
+                        if total_seconds < shortest_duration_subtitle_stream:
+                            shortest_duration_subtitle_stream = total_seconds
+                        if total_seconds > longest_duration_subtitle_stream:
+                            longest_duration_subtitle_stream = total_seconds #Here we actually want the longest subtitle stream. This is probably going to accidentally tag some SDH/hearing impaired streams, but they will work.
+                            guessed_forced_sub = s.index
+                            guessed_subtitle_number = subtitle_number
+                else:
+                    forced_sub = s.index   # burn in the first subtitle stream that matches the users language.  
+                    subtitle_used = subtitle_number
+                    s.sub_forced = 1
+                    break
 
-        if forced_sub == 0 and desired_language_streams > 1 and longest_duration_subtitle_stream > 1 and \
+        if self.burn_in_full_subs == True:
+            forced_sub = guessed_forced_sub
+            subtitle_used = guessed_subtitle_number
+        elif forced_sub == 0 and desired_language_streams > 1 and longest_duration_subtitle_stream > 1 and \
             ( float( shortest_duration_subtitle_stream ) / float( longest_duration_subtitle_stream ) ) < 0.75: # This is a sanity check just in case there is a video with multiple
             forced_sub = guessed_forced_sub # native-speaking language subtitle streams and the 2nd one just happens to be a director's commentary instead of foreign language subtitles.
             subtitle_used = guessed_subtitle_number # If the film has >75% forced subtitles then it's probably going to be flagged with overrideLang = true
-            self.log.info( "Used experimental forced subtitle guess" ) #Just to check when it is used. 
+            self.log.info( "Used experimental forced subtitle guess" ) #Just to check when it is used.
 
         for s in info.subtitle:
             if forced_sub > 0 and s.index != forced_sub and self.burn_in_forced_subs == True:

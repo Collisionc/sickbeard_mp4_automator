@@ -187,6 +187,8 @@ class MediaStreamInfo(object):
             key = key.split('TAG:')[1].lower()
             value = val.lower().strip()
             self.metadata[key] = value
+            if key == 'duration-eng':
+                self.sub_force_guess = val
 
         if self.type == 'audio':
             if key == 'avg_frame_rate':
@@ -442,7 +444,7 @@ class FFMpeg(object):
 
         info = MediaInfo(posters_as_video)
 
-        p = self._spawn([self.ffprobe_path, '-analyzeduration', '9999999999', '-probesize', '1999999999',
+        p = self._spawn([self.ffprobe_path, '-analyzeduration', '9999999999', '-probesize', '3999999999',
                          '-show_format', '-show_streams', fname])
         stdout_data, _ = p.communicate()
         stdout_data = stdout_data.decode(console_encoding, errors='ignore')
@@ -558,7 +560,7 @@ class FFMpeg(object):
             # new option to force re-encoding.
             # The script will wait here until the subprocess is finished, in which it then exits this function and
             # pretends that everything is a-okay so that sabn/nzbget/etc scripts will properly autoimport the file.
-            ignore_non_monotonous = True #Temporarily disabling this as it's causing some odd issues.
+            #ignore_non_monotonous = False #Temporarily disabling this as it's causing some odd issues.
             if 'Queue input is backward in time' in ret: # This warning tends to come up at the very end of a file
                 ignore_non_monotonous = True # generally it's because the audio stream ends a few seconds before the video.
                 # After this, it will spam warnings about non-monotonous DTS, but it doesn't matter since it's during the credits.

@@ -55,8 +55,8 @@ try:
     torrent_files = torrent_data[b'files']
     category = torrent_data[b'label'].lower().decode()
 except:
-torrent_files = torrent_data['files']
-category = torrent_data['label'].lower()
+    torrent_files = torrent_data['files']
+    category = torrent_data['label'].lower()
 
 files = []
 log.info("List of files in torrent:")
@@ -65,8 +65,8 @@ for contents in torrent_files:
         files.append(contents[b'path'].decode())
         log.debug(contents[b'path'].decode())
     except:
-    files.append(contents['path'])
-    log.info(contents['path'])
+        files.append(contents['path'])
+        log.info(contents['path'])
 
 if category.lower() not in categories:
     log.error("No valid category detected.")
