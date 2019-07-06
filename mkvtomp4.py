@@ -791,7 +791,7 @@ class MkvtoMp4:
                         'language': s.metadata['language'],
                         'encoding': self.subencoding,
                         'disposition': 'none',
-                        'forced': s.sub_forced,
+                        'forced': ( 1 if ( self.burn_in_full_subs == True ) else s.sub_forced ),
                         'default': s.sub_default,
                         'burn_in_forced_subs': self.burn_in_forced_subs,
                         'subtitle_burn': drive_letter_no_colon + r"\:" + directory + "\\\\" + filename + "." + input_extension + \
