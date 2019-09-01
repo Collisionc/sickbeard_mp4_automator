@@ -213,6 +213,22 @@ class ReadSettings:
                            'output_directory': '',
                            'remove': 'false'}
 
+                # Default qbittorent settings
+        qbittorrent_defaults = {'couchpotato-label': 'couchpotato',
+                             'sickbeard-label': 'sickbeard',
+                             'sickrage-label': 'sickrage',
+                             'sonarr-label': 'sonarr',
+                             'radarr-label': 'radarr',
+                             'bypass-label': 'bypass',
+                             'convert': 'True',
+                             'action_before': 'pause',
+                             'action_after': 'resume',
+                             'host': 'http://localhost:8080/',
+                             'username': '',
+                             'password': '',
+                             'output_directory': ''
+                             }
+
         # Default Plex Settings
         plex_defaults = {'host': 'localhost',
                          'port': '32400',
@@ -227,7 +243,7 @@ class ReadSettings:
 
         podnapisi_defaults = {'only_foreign':'true'}
 
-        defaults = {'SickBeard': sb_defaults, 'CouchPotato': cp_defaults, 'Sonarr': sonarr_defaults, 'Radarr': radarr_defaults, 'MP4': mp4_defaults, 'uTorrent': utorrent_defaults, 'SABNZBD': sab_defaults, 'Sickrage': sr_defaults, 'Deluge': deluge_defaults, 'Plex': plex_defaults, 'Opensubtitles': opensubtitles_defaults, 'Podnapisi': podnapisi_defaults }
+        defaults = {'SickBeard': sb_defaults, 'CouchPotato': cp_defaults, 'Sonarr': sonarr_defaults, 'Radarr': radarr_defaults, 'MP4': mp4_defaults, 'uTorrent': utorrent_defaults, 'SABNZBD': sab_defaults, 'Sickrage': sr_defaults, 'Deluge': deluge_defaults, 'qBittorrent': qbittorrent_defaults, 'Plex': plex_defaults, 'Opensubtitles': opensubtitles_defaults, 'Podnapisi': podnapisi_defaults }
         write = False  # Will be changed to true if a value is missing from the config file and needs to be written
 
         config = configparser.SafeConfigParser()
