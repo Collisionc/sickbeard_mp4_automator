@@ -444,7 +444,7 @@ class FFMpeg(object):
 
         info = MediaInfo(posters_as_video)
 
-        p = self._spawn([self.ffprobe_path, '-analyzeduration', '9999999999', '-probesize', '3999999999',
+        p = self._spawn([self.ffprobe_path, '-analyzeduration', '99999999999', '-probesize', '39999999999',
                          '-show_format', '-show_streams', fname])
         stdout_data, _ = p.communicate()
         stdout_data = stdout_data.decode(console_encoding, errors='ignore')

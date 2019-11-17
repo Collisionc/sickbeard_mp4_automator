@@ -805,7 +805,8 @@ class MkvtoMp4:
                     self.log.info("Creating subtitle stream %s from source stream %s." % (l, s.index))
                     subtitle_temporary = subtitle_settings[l]['subtitle_burn']
                     subtitle_temporary = subtitle_temporary.replace( "\\", "\\\\" )
-                    subtitle_temporary = subtitle_temporary.replace("'", "\\\\\\\'\\\\\\" ) # "Special character escapes are like violence: If they're not solving your problem, you're not using enough.
+                    subtitle_temporary = subtitle_temporary.replace("'", "\\\\\\\'\\\\\\" ) # "Special character escapes are like violence: If they're not solving your problem,
+                                                                                            # you're not using enough.
                     subtitle_burn = "subtitles=" + subtitle_temporary
                     l = l + 1
             
