@@ -240,7 +240,7 @@ class ReadSettings:
                                   'only_foreign': 'true',
                                   'is_vip': 'false' }
         podnapisi_defaults = {'only_foreign':'true'}
-        defaults = {'SickBeard': sb_defaults, 'CouchPotato': cp_defaults, 'Sonarr': sonarr_defaults, 'Radarr': radarr_defaults, 'MP4': mp4_defaults, 'uTorrent': utorrent_defaults, 'qBittorrent': qbt_defaults, 'SABNZBD': sab_defaults, 'Sickrage': sr_defaults, 'Deluge': deluge_defaults, 'Plex': plex_defaults, 'Opensubtitles': opensubtitles_defaults, 'Podnapisi': podnapisi_defaults }}
+        defaults = {'SickBeard': sb_defaults, 'CouchPotato': cp_defaults, 'Sonarr': sonarr_defaults, 'Radarr': radarr_defaults, 'MP4': mp4_defaults, 'uTorrent': utorrent_defaults, 'qBittorrent': qbt_defaults, 'SABNZBD': sab_defaults, 'Sickrage': sr_defaults, 'Deluge': deluge_defaults, 'Plex': plex_defaults, 'Opensubtitles': opensubtitles_defaults, 'Podnapisi': podnapisi_defaults }
         write = False  # Will be changed to true if a value is missing from the config file and needs to be written
 
         config = configparser.SafeConfigParser()
