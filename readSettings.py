@@ -213,21 +213,20 @@ class ReadSettings:
                            'output_directory': '',
                            'remove': 'false'}
 
-                # Default qbittorent settings
-        qbittorrent_defaults = {'couchpotato-label': 'couchpotato',
-                             'sickbeard-label': 'sickbeard',
-                             'sickrage-label': 'sickrage',
-                             'sonarr-label': 'sonarr',
-                             'radarr-label': 'radarr',
-                             'bypass-label': 'bypass',
-                             'convert': 'True',
-                             'action_before': 'pause',
-                             'action_after': 'resume',
-                             'host': 'http://localhost:8080/',
-                             'username': '',
-                             'password': '',
-                             'output_directory': ''
-                             }
+        # Default QBT settings
+        qbt_defaults = {'couchpotato-label': 'couchpotato',
+                        'sickbeard-label': 'sickbeard',
+                        'sickrage-label': 'sickrage',
+                        'sonarr-label': 'sonarr',
+                        'radarr-label': 'radarr',
+                        'bypass-label': 'bypass',
+                        'convert': 'True',
+                        'action_before': '',
+                        'action_after': '',
+                        'host': 'http://localhost:8080/',
+                        'username': '',
+                        'password': '',
+                        'output_directory': ''}
 
         # Default Plex Settings
         plex_defaults = {'host': 'localhost',
@@ -240,10 +239,8 @@ class ReadSettings:
                                   'password': '',
                                   'only_foreign': 'true',
                                   'is_vip': 'false' }
-
         podnapisi_defaults = {'only_foreign':'true'}
-
-        defaults = {'SickBeard': sb_defaults, 'CouchPotato': cp_defaults, 'Sonarr': sonarr_defaults, 'Radarr': radarr_defaults, 'MP4': mp4_defaults, 'uTorrent': utorrent_defaults, 'SABNZBD': sab_defaults, 'Sickrage': sr_defaults, 'Deluge': deluge_defaults, 'qBittorrent': qbittorrent_defaults, 'Plex': plex_defaults, 'Opensubtitles': opensubtitles_defaults, 'Podnapisi': podnapisi_defaults }
+        defaults = {'SickBeard': sb_defaults, 'CouchPotato': cp_defaults, 'Sonarr': sonarr_defaults, 'Radarr': radarr_defaults, 'MP4': mp4_defaults, 'uTorrent': utorrent_defaults, 'qBittorrent': qbt_defaults, 'SABNZBD': sab_defaults, 'Sickrage': sr_defaults, 'Deluge': deluge_defaults, 'Plex': plex_defaults, 'Opensubtitles': opensubtitles_defaults, 'Podnapisi': podnapisi_defaults }}
         write = False  # Will be changed to true if a value is missing from the config file and needs to be written
 
         config = configparser.SafeConfigParser()
@@ -686,11 +683,11 @@ class ReadSettings:
             self.qBittorrent['output_dir'] = None
         else:
             self.qBittorrent['output_dir'] = os.path.normpath(self.raw(self.qBittorrent['output_dir']))  # Output directory        
-        self.qBittorrentActionBefore = config.get(section, "action_before").lower()
-        self.qBittorrentActionAfter = config.get(section, "action_after").lower()
-        self.qBittorrentHost = config.get(section, "host").lower()
-        self.qBittorrentUsername = config.get(section, "username")
-        self.qBittorrentPassword = config.get(section, "password")
+        self.qBittorrent['actionBefore'] = config.get(section, "action_before").lower()
+        self.qBittorrent['actionAfter'] = config.get(section, "action_after").lower()
+        self.qBittorrent['host'] = config.get(section, "host").lower()
+        self.qBittorrent['username'] = config.get(section, "username")
+        self.qBittorrent['password'] = config.get(section, "password")
 
         # Read relevant Deluge section information
         section = "Deluge"
