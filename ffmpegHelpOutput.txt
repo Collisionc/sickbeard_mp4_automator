@@ -2041,6 +2041,42 @@ VOBSUB subtitle encoder AVOptions:
 MOV text enoder AVOptions:
   -height            <int>        E....S.... Frame height, usually video height (from 0 to INT_MAX) (default 0)
 
+libcodec2 encoder AVOptions:
+  -mode              <int>        E...A..... codec2 mode (from 0 to 8) (default 1300)
+     3200            0            E...A..... 3200
+     2400            1            E...A..... 2400
+     1600            2            E...A..... 1600
+     1400            3            E...A..... 1400
+     1300            4            E...A..... 1300
+     1200            5            E...A..... 1200
+     700             6            E...A..... 700
+     700B            7            E...A..... 700B
+     700C            8            E...A..... 700C
+
+libfdk_aac AVOptions:
+  -afterburner       <int>        E...A..... Afterburner (improved quality) (from 0 to 1) (default 1)
+  -eld_sbr           <int>        E...A..... Enable SBR for ELD (for SBR in other configurations, use the -profile parameter) (from 0 to 1) (default 0)
+  -eld_v2            <int>        E...A..... Enable ELDv2 (LD-MPS extension for ELD stereo signals) (from 0 to 1) (default 0)
+  -signaling         <int>        E...A..... SBR/PS signaling style (from -1 to 2) (default default)
+     default         -1           E...A..... Choose signaling implicitly (explicit hierarchical by default, implicit if global header is disabled)
+     implicit        0            E...A..... Implicit backwards compatible signaling
+     explicit_sbr    1            E...A..... Explicit SBR, implicit PS signaling
+     explicit_hierarchical 2            E...A..... Explicit hierarchical signaling
+  -latm              <int>        E...A..... Output LATM/LOAS encapsulated data (from 0 to 1) (default 0)
+  -header_period     <int>        E...A..... StreamMuxConfig and PCE repetition period (in frames) (from 0 to 65535) (default 0)
+  -vbr               <int>        E...A..... VBR mode (1-5) (from 0 to 5) (default 0)
+
+libilbc AVOptions:
+  -mode              <int>        E...A..... iLBC mode (20 or 30 ms frames) (from 20 to 30) (default 20)
+
+libmp3lame encoder AVOptions:
+  -reservoir         <boolean>    E...A..... use bit reservoir (default true)
+  -joint_stereo      <boolean>    E...A..... use joint stereo (default true)
+  -abr               <boolean>    E...A..... use ABR (default false)
+
+libopencore_amrnb AVOptions:
+  -dtx               <int>        E...A..... Allow DTX (generate comfort noise) (from 0 to 1) (default 0)
+
 libsvt_av1 AVOptions:
   -hielevel          <int>        E..V...... Hierarchical prediction levels setting (from 3 to 4) (default 4level)
      3level          3            E..V......
@@ -2080,48 +2116,14 @@ libsvt_av1 AVOptions:
      7.2             72           E..V......
      7.3             73           E..V......
   -rc                <int>        E..V...... Bit rate control mode (from 0 to 3) (default cqp)
-     cqp             0            E..V......
-     vbr             2            E..V......
-     cvbr            3            E..V......
+     cqp             0            E..V...... Const Quantization Parameter
+     vbr             1            E..V...... Variable Bit Rate, use a target bitrate for the entire stream
+     cvbr            2            E..V...... Constrained Variable Bit Rate, use a target bitrate for each GOP
   -qp                <int>        E..V...... QP value for intra frames (from 0 to 63) (default 50)
   -sc_detection      <boolean>    E..V...... Scene change detection (default false)
-  -forced-idr        <boolean>    E..V...... If forcing keyframes, force them as IDR frames. (default false)
-
-libcodec2 encoder AVOptions:
-  -mode              <int>        E...A..... codec2 mode (from 0 to 8) (default 1300)
-     3200            0            E...A..... 3200
-     2400            1            E...A..... 2400
-     1600            2            E...A..... 1600
-     1400            3            E...A..... 1400
-     1300            4            E...A..... 1300
-     1200            5            E...A..... 1200
-     700             6            E...A..... 700
-     700B            7            E...A..... 700B
-     700C            8            E...A..... 700C
-
-libfdk_aac AVOptions:
-  -afterburner       <int>        E...A..... Afterburner (improved quality) (from 0 to 1) (default 1)
-  -eld_sbr           <int>        E...A..... Enable SBR for ELD (for SBR in other configurations, use the -profile parameter) (from 0 to 1) (default 0)
-  -eld_v2            <int>        E...A..... Enable ELDv2 (LD-MPS extension for ELD stereo signals) (from 0 to 1) (default 0)
-  -signaling         <int>        E...A..... SBR/PS signaling style (from -1 to 2) (default default)
-     default         -1           E...A..... Choose signaling implicitly (explicit hierarchical by default, implicit if global header is disabled)
-     implicit        0            E...A..... Implicit backwards compatible signaling
-     explicit_sbr    1            E...A..... Explicit SBR, implicit PS signaling
-     explicit_hierarchical 2            E...A..... Explicit hierarchical signaling
-  -latm              <int>        E...A..... Output LATM/LOAS encapsulated data (from 0 to 1) (default 0)
-  -header_period     <int>        E...A..... StreamMuxConfig and PCE repetition period (in frames) (from 0 to 65535) (default 0)
-  -vbr               <int>        E...A..... VBR mode (1-5) (from 0 to 5) (default 0)
-
-libilbc AVOptions:
-  -mode              <int>        E...A..... iLBC mode (20 or 30 ms frames) (from 20 to 30) (default 20)
-
-libmp3lame encoder AVOptions:
-  -reservoir         <boolean>    E...A..... use bit reservoir (default true)
-  -joint_stereo      <boolean>    E...A..... use joint stereo (default true)
-  -abr               <boolean>    E...A..... use ABR (default false)
-
-libopencore_amrnb AVOptions:
-  -dtx               <int>        E...A..... Allow DTX (generate comfort noise) (from 0 to 1) (default 0)
+  -forced-idr        <boolean>    E..V...... If forcing keyframes, force them as IDR frames. (default true)
+  -tile-columns      <int>        E..V...... Log2 of number of tile columns to use (from 0 to 4) (default 0)
+  -tile-rows         <int>        E..V...... Log2 of number of tile rows to use (from 0 to 6) (default 0)
 
 libopenjpeg AVOptions:
   -format            <int>        E..V...... Codec Format (from 0 to 2) (default jp2)
@@ -3198,7 +3200,7 @@ hevc_amf AVOptions:
      none            0            E..V...... 
      gop             1            E..V...... 
      idr             2            E..V...... 
-  -gops_per_idr      <int>        E..V...... GOPs per IDR 0-no IDR will be inserted (from 0 to INT_MAX) (default 60)
+  -gops_per_idr      <int>        E..V...... GOPs per IDR 0-no IDR will be inserted (from 0 to INT_MAX) (default 1)
   -preanalysis       <boolean>    E..V...... Enable preanalysis (default false)
   -vbaq              <boolean>    E..V...... Enable VBAQ (default false)
   -enforce_hrd       <boolean>    E..V...... Enforce HRD (default false)
@@ -3914,9 +3916,9 @@ http AVOptions:
   -http_proxy        <string>     ED........ set HTTP proxy to tunnel through
   -headers           <string>     ED........ set custom HTTP headers, can override built in default headers
   -content_type      <string>     ED........ set a specific content type for the POST messages
-  -user_agent        <string>     .D........ override User-Agent header (default "Lavf/58.47.100")
+  -user_agent        <string>     .D........ override User-Agent header (default "Lavf/58.48.100")
   -referer           <string>     .D........ override referer header
-  -user-agent        <string>     .D........ use the "user_agent" option instead (default "Lavf/58.47.100")
+  -user-agent        <string>     .D........ use the "user_agent" option instead (default "Lavf/58.48.100")
   -multiple_requests <boolean>    ED........ use persistent connections (default false)
   -post_data         <binary>     ED........ set custom HTTP post data
   -cookies           <string>     .D........ set cookies to be sent in applicable future requests, use newline delimited Set-Cookie HTTP field value syntax
@@ -3943,9 +3945,9 @@ https AVOptions:
   -http_proxy        <string>     ED........ set HTTP proxy to tunnel through
   -headers           <string>     ED........ set custom HTTP headers, can override built in default headers
   -content_type      <string>     ED........ set a specific content type for the POST messages
-  -user_agent        <string>     .D........ override User-Agent header (default "Lavf/58.47.100")
+  -user_agent        <string>     .D........ override User-Agent header (default "Lavf/58.48.100")
   -referer           <string>     .D........ override referer header
-  -user-agent        <string>     .D........ use the "user_agent" option instead (default "Lavf/58.47.100")
+  -user-agent        <string>     .D........ use the "user_agent" option instead (default "Lavf/58.48.100")
   -multiple_requests <boolean>    ED........ use persistent connections (default false)
   -post_data         <binary>     ED........ set custom HTTP post data
   -cookies           <string>     .D........ set cookies to be sent in applicable future requests, use newline delimited Set-Cookie HTTP field value syntax
@@ -3976,6 +3978,7 @@ icecast AVOptions:
   -password          <string>     E......... set password
   -content_type      <string>     E......... set content-type, MUST be set if not audio/mpeg
   -legacy_icecast    <boolean>    E......... use legacy SOURCE method, for Icecast < v2.4 (default false)
+  -tls               <boolean>    E......... use a TLS connection (default false)
 
 pipe AVOptions:
   -blocksize         <int>        E......... set I/O operation maximum block size (from 1 to INT_MAX) (default INT_MAX)
@@ -4885,8 +4888,8 @@ RTSP muxer AVOptions:
   -reorder_queue_size <int>        .D........ set number of packets to buffer for handling of reordered packets (from -1 to INT_MAX) (default -1)
   -buffer_size       <int>        ED........ Underlying protocol send/receive buffer size (from -1 to INT_MAX) (default -1)
   -pkt_size          <int>        E......... Underlying protocol send packet size (from -1 to INT_MAX) (default -1)
-  -user_agent        <string>     .D........ override User-Agent header (default "Lavf58.47.100")
-  -user-agent        <string>     .D........ override User-Agent header (deprecated, use user_agent) (default "Lavf58.47.100")
+  -user_agent        <string>     .D........ override User-Agent header (default "Lavf58.48.100")
+  -user-agent        <string>     .D........ override User-Agent header (deprecated, use user_agent) (default "Lavf58.48.100")
 
 segment muxer AVOptions:
   -reference_stream  <string>     E......... set reference stream (default "auto")
@@ -5628,8 +5631,8 @@ RTSP demuxer AVOptions:
   -reorder_queue_size <int>        .D........ set number of packets to buffer for handling of reordered packets (from -1 to INT_MAX) (default -1)
   -buffer_size       <int>        ED........ Underlying protocol send/receive buffer size (from -1 to INT_MAX) (default -1)
   -pkt_size          <int>        E......... Underlying protocol send packet size (from -1 to INT_MAX) (default -1)
-  -user_agent        <string>     .D........ override User-Agent header (default "Lavf58.47.100")
-  -user-agent        <string>     .D........ override User-Agent header (deprecated, use user_agent) (default "Lavf58.47.100")
+  -user_agent        <string>     .D........ override User-Agent header (default "Lavf58.48.100")
+  -user-agent        <string>     .D........ override User-Agent header (deprecated, use user_agent) (default "Lavf58.48.100")
 
 sbc demuxer AVOptions:
   -raw_packet_size   <int>        .D........  (from 1 to INT_MAX) (default 1024)
@@ -5805,6 +5808,13 @@ pgm demuxer AVOptions:
   -video_size        <image_size> .D........ set video size
   -loop              <boolean>    .D........ force loop over input file sequence (default false)
 
+pgx demuxer AVOptions:
+  -frame_size        <int>        .D........ force frame size in bytes (from 0 to INT_MAX) (default 0)
+  -framerate         <video_rate> .D........ set the video framerate (default "25")
+  -pixel_format      <string>     .D........ set video pixel format
+  -video_size        <image_size> .D........ set video size
+  -loop              <boolean>    .D........ force loop over input file sequence (default false)
+
 pictor demuxer AVOptions:
   -frame_size        <int>        .D........ force frame size in bytes (from 0 to INT_MAX) (default 0)
   -framerate         <video_rate> .D........ set the video framerate (default "25")
@@ -5926,6 +5936,7 @@ Blackmagic DeckLink indev AVOptions:
      argb            32           .D........
      bgra            1111970369   .D........
      rgb10           1915892016   .D........
+  -enable_klv        <boolean>    .D........ output klv if present in vanc (default false)
   -teletext_lines    <int64>      .D........ teletext lines bitmask (from 0 to 3.43597e+10) (default 0)
      standard                     .D........
      all                          .D........
@@ -8896,7 +8907,7 @@ displace AVOptions:
      mirror          3            ..FV...... 
 
 dnn_processing AVOptions:
-  dnn_backend       <int>        ..FV...... DNN backend (from 0 to 1) (default native)
+  dnn_backend       <int>        ..FV...... DNN backend (from INT_MIN to INT_MAX) (default native)
      native          0            ..FV...... native backend flag
   model             <string>     ..FV...... path to model file
   input             <string>     ..FV...... input name of the model
@@ -13534,6 +13545,7 @@ Decoders:
  V....D pfm                  PFM (Portable FloatMap) image
  V....D pgm                  PGM (Portable GrayMap) image
  V....D pgmyuv               PGMYUV (Portable GrayMap YUV) image
+ V....D pgx                  PGX (JPEG2000 Test Format)
  V....D pictor               Pictor/PC Paint
  VF...D pixlet               Apple Pixlet
  VF...D png                  PNG (Portable Network Graphics) image
@@ -14021,6 +14033,7 @@ Codecs:
  D.VI.S pfm                  PFM (Portable FloatMap) image
  DEVI.S pgm                  PGM (Portable GrayMap) image
  DEVI.S pgmyuv               PGMYUV (Portable GrayMap YUV) image
+ D.VI.S pgx                  PGX (JPEG2000 Test Format)
  D.VIL. pictor               Pictor/PC Paint
  D.VIL. pixlet               Apple Pixlet
  DEV..S png                  PNG (Portable Network Graphics) image
@@ -14296,7 +14309,7 @@ Codecs:
  DEAI.. sonic                Sonic
  .EAI.. sonicls              Sonic lossless
  DEAIL. speex                Speex (decoders: libspeex ) (encoders: libspeex )
- D.AI.S tak                  TAK (Tom's lossless Audio Kompressor)
+ D.A..S tak                  TAK (Tom's lossless Audio Kompressor)
  DEA..S truehd               TrueHD
  D.AIL. truespeech           DSP Group TrueSpeech
  DEAI.S tta                  TTA (True Audio)
@@ -14796,6 +14809,7 @@ File formats:
  D  pcx_pipe        piped pcx sequence
  D  pgm_pipe        piped pgm sequence
  D  pgmyuv_pipe     piped pgmyuv sequence
+ D  pgx_pipe        piped pgx sequence
  D  pictor_pipe     piped pictor sequence
  D  pjs             PJS (Phoenix Japanimation Society) subtitles
  D  pmp             Playstation Portable PMP
@@ -15306,6 +15320,7 @@ File formats:
  D  pcx_pipe        piped pcx sequence
  D  pgm_pipe        piped pgm sequence
  D  pgmyuv_pipe     piped pgmyuv sequence
+ D  pgx_pipe        piped pgx sequence
  D  pictor_pipe     piped pictor sequence
  D  pjs             PJS (Phoenix Japanimation Society) subtitles
  D  pmp             Playstation Portable PMP
@@ -15427,7 +15442,6 @@ dxva2
 qsv
 d3d11va
 opencl
-vulkan
 
 Filters:
   T.. = Timeline support

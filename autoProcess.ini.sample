@@ -98,6 +98,7 @@ burn_in_full_subs =  False
 enable_hdr_sdr_tonemapping = False
 enable_opencl_hdr_sdr_tonemapping = False
 init_hw_device = opencl=gpu:0
+nvenc_multipass = 
 
 [CouchPotato]
 host = localhost

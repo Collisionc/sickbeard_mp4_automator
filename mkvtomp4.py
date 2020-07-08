@@ -27,6 +27,7 @@ class MkvtoMp4:
                  video_width=None,
                  nvenc_profile=None,
                  nvenc_preset=None,
+                 nvenc_multipass=None,
                  nvenc_rate_control=None,
                  qmin=None,
                  qmax=None,
@@ -38,6 +39,7 @@ class MkvtoMp4:
                  nvenc_temporal_aq=False,
                  nvenc_weighted_prediction=False,
                  nvenc_rc_lookahead=None,
+                 nvenc_cq=None,
                  handle_m2ts_files=False,
                  video_profile=None,
                  h264_level=None,
@@ -121,6 +123,7 @@ class MkvtoMp4:
         self.video_width = video_width
         self.nvenc_profile = nvenc_profile
         self.nvenc_preset = nvenc_preset
+        self.nvenc_multipass = nvenc_multipass
         self.qmin = qmin
         self.qmax = qmax
         self.global_quality = global_quality
@@ -132,6 +135,7 @@ class MkvtoMp4:
         self.nvenc_weighted_prediction = nvenc_weighted_prediction
         self.nvenc_rate_control = nvenc_rate_control
         self.nvenc_rc_lookahead = nvenc_rc_lookahead
+        self.nvenc_cq = nvenc_cq
         self.video_profile = video_profile
         self.h264_level = h264_level
         self.handle_m2ts_files = handle_m2ts_files
@@ -208,6 +212,7 @@ class MkvtoMp4:
         self.video_width = settings.vwidth
         self.nvenc_profile = settings.nvenc_profile
         self.nvenc_preset = settings.nvenc_preset
+        self.nvenc_multipass = settings.nvenc_multipass
         self.qmin = settings.qmin
         self.qmax = settings.qmax
         self.global_quality = settings.global_quality
@@ -219,6 +224,7 @@ class MkvtoMp4:
         self.nvenc_weighted_prediction = settings.nvenc_weighted_prediction
         self.nvenc_rate_control = settings.nvenc_rate_control
         self.nvenc_rc_lookahead = settings.nvenc_rc_lookahead
+        self.nvenc_cq = settings.nvenc_cq
         self.handle_m2ts_files = settings.handle_m2ts_files
         self.video_profile = settings.vprofile
         self.h264_level = settings.h264_level
@@ -1119,6 +1125,8 @@ class MkvtoMp4:
             options['video']['nvenc_profile'] = self.nvenc_profile
         if self.nvenc_preset:
             options['video']['nvenc_preset'] = self.nvenc_preset
+        if self.nvenc_multipass:
+            options['video']['nvenc_multipass'] = self.nvenc_multipass
         if self.nvenc_rate_control:
             options['video']['nvenc_rate_control'] = self.nvenc_rate_control
             if self.nvenc_rate_control == "vbr_minqp" and self.qmin is None:
@@ -1133,6 +1141,8 @@ class MkvtoMp4:
             options['video']['nvenc_weighted_prediction'] = self.nvenc_weighted_prediction
         if self.nvenc_rc_lookahead:
             options['video']['nvenc_rc_lookahead'] = self.nvenc_rc_lookahead
+        if self.nvenc_cq:
+            options['video']['nvenc_cq'] = self.nvenc_cq
         # HEVC Tagging for copied streams
         if info.video.codec.lower() in ['x265', 'h265', 'hevc'] and vcodec == 'copy':
             options['postopts'].extend(['-tag:v', 'hvc1'])

@@ -94,6 +94,7 @@ class ReadSettings:
                         'video-max-width': '',
                         'nvenc_profile':'',
                         'nvenc_preset':'',
+                        'nvenc_multipass':'',
                         'qmin':'',
                         'qmax':'',
                         'global_quality':'',
@@ -104,6 +105,7 @@ class ReadSettings:
                         'nvenc_temporal_aq':'False',
                         'nvenc_weighted_prediction':'False',
                         'nvenc_rc_lookahead':'',
+                        'nvenc_cq':'',
                         'nvenc_rate_control':'',
                         'enable_nvenc_decoder':'False',
                         'enable_nvenc_hevc_decoder':'False',
@@ -480,6 +482,7 @@ class ReadSettings:
         self.nvenc_hwaccel_enabled = False
         self.nvenc_profile = config.get(section, "nvenc_profile")
         self.nvenc_preset = config.get(section, "nvenc_preset")
+        self.nvenc_multipass = config.get(section, "nvenc_multipass")
         self.qmin = config.get(section, "qmin")
         self.qmax = config.get(section, "qmax")
         self.global_quality = config.get(section, "global_quality")
@@ -494,6 +497,7 @@ class ReadSettings:
         self.nvenc_weighted_prediction = config.getboolean( section, "nvenc_weighted_prediction" )
         self.nvenc_rate_control = config.get( section, "nvenc_rate_control")
         self.nvenc_rc_lookahead = config.get( section, "nvenc_rc_lookahead")
+        self.nvenc_cq = config.get( section, "nvenc_cq" )
         self.nvenc_cuvid = config.getboolean(section, "enable_nvenc_decoder") 
         self.nvenc_cuvid_hevc = config.getboolean(section, "enable_nvenc_hevc_decoder")
         self.nvenc_decoder_gpu = config.get(section, "nvenc_decoder_gpu")

@@ -797,13 +797,15 @@ class NVEncH264(H264Codec):
     encoder_options.update({
         'nvenc_profile': str,  # Options include: baseline, main, high, high444p - default is main
         'nvenc_rate_control': str, # Options include: constqp, vbr, cbr, vbr_minqp, ll_2pass_quality, ll_2pass_size, vbr_2pass, cbr_ld_hq, cbr_hq, vbr_hq - default constqp
-        'nvenc_preset': int,  # Options include: slow, medium, fast, hp, hq, bd, ll, llhq, llhp, lossless, losslesshp - default is medium
+        'nvenc_preset': str,  # Options include: slow, medium, fast, hp, hq, bd, ll, llhq, llhp, lossless, losslesshp, p1,p2,p3,p4,p5,p6,p7 - default is medium
+        'nvenc_multipass': str, #Options include disabled, qres, fullres
         'nvenc_gpu': int,  # Selects which NVENC capable GPU to use. First GPU is 0, second is 1, and so on. (from -2 to INT_MAX) (default any) 
         'nvenc_temporal_aq': int, # Default off / 0
         'nvenc_rc_lookahead': int, # Number of frames to look ahead, default -1
         'nvenc_weighted_prediction': int, # Default off / 0
         'nvenc_hwaccel_enabled': bool,
-        'qp':int
+        'qp':int,
+        'nvenc_cq':float
     })
 
     def parse_options(self, opt, stream=0):
@@ -825,12 +827,16 @@ class NVEncH264(H264Codec):
             optlist.extend(['-profile:v', safe['nvenc_profile']])
         if 'nvenc_preset' in safe:
             optlist.extend(['-preset', str(safe['nvenc_preset'])])
+        if 'nvenc_multipass' in safe:
+            optlist.extend(['-multipass', str(safe['nvenc_multipass'])])
         if 'nvenc_rate_control' in safe:
             optlist.extend(['-rc', safe['nvenc_rate_control']])
         if 'nvenc_gpu' in safe:
             optlist.extend(['-gpu', str(safe['nvenc_gpu'])])
         if 'qp' in safe:
             optlist.extend(['-qp', str(safe['qp'])])
+        if 'nvenc_cq' in safe:
+            optlist.extend(['-cq', str(safe['nvenc_cq'])])
         if 'nvenc_temporal_aq' in safe:
             optlist.extend(['-temporal-aq', str(safe['nvenc_temporal_aq'])])
         if 'nvenc_weighted_prediction' in safe:
@@ -1007,13 +1013,15 @@ class NVEncH265(H265Codec):
     encoder_options.update({
         'nvenc_profile': str,  # Options include: main, main10, rext - default is main
         'nvenc_rate_control': str, # Options include: constqp, vbr, cbr, vbr_minqp, ll_2pass_quality, ll_2pass_size, vbr_2pass, cbr_ld_hq, cbr_hq, vbr_hq - default constqp
-        'nvenc_preset': int,  # Options include: slow, medium, fast, hp, hq, bd, ll, llhq, llhp, lossless, losslesshp - default is medium
+        'nvenc_preset': str,  # Options include: slow, medium, fast, hp, hq, bd, ll, llhq, llhp, lossless, losslesshp - default is medium
+        'nvenc_multipass': str, #Options include Disabled, qrex, fullres
         'nvenc_gpu': int,  # Selects which NVENC capable GPU to use. First GPU is 0, second is 1, and so on. (from -2 to INT_MAX) (default any) 
         'nvenc_temporal_aq': int, # Default Off / 0
         'nvenc_rc_lookahead': int, # Number of frames to look ahead, default -1
         'nvenc_weighted_prediction': int, # Default Off / 0
         'nvenc_hwaccel_enabled': bool,
-        'qp':int
+        'qp':int,
+        'nvenc_cq':float
     })
 
     def parse_options(self, opt, stream=0):
@@ -1035,6 +1043,8 @@ class NVEncH265(H265Codec):
             optlist.extend(['-profile:v', safe['nvenc_profile']])
         if 'nvenc_preset' in safe:
             optlist.extend(['-preset', str(safe['nvenc_preset'])])
+        if 'nvenc_multipass' in safe:
+            optlist.extend(['-multipass', str(safe['nvenc_multipass'])])
         if 'nvenc_rate_control' in safe:
             optlist.extend(['-rc', safe['nvenc_rate_control']])
         if 'nvenc_gpu' in safe:
@@ -1043,6 +1053,8 @@ class NVEncH265(H265Codec):
             optlist.extend(['-rc-lookahead', str(safe['nvenc_rc_lookahead'])])
         if 'qp' in safe:
             optlist.extend(['-qp', str(safe['qp'])])
+        if 'nvenc_cq' in safe:
+            optlist.extend(['-cq', str(safe['nvenc_cq'])])
         if 'nvenc_weighted_prediction' in safe:
             optlist.extend(['-weighted_pred', str(safe['nvenc_weighted_prediction'])])
         if 'level' in safe:
