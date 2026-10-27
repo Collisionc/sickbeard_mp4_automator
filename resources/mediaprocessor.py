@@ -1021,6 +1021,8 @@ class MediaProcessor:
                     asample = self.settings.audio_samplerates[0]
                     acodec = self.settings.ua[0]
                     adebug = adebug + ".audio-sample-rates"
+                elif a.audio_samplerate in self.settings.audio_samplerates:
+                    asample = a.audio_samplerate
             else:
                 # If desired codec is the same as the source codec, copy to avoid quality loss
                 acodec = 'copy' if a.codec in self.settings.acodec else self.settings.acodec[0]
@@ -1067,6 +1069,8 @@ class MediaProcessor:
                     asample = self.settings.audio_samplerates[0]
                     acodec = self.settings.acodec[0]
                     adebug = adebug + ".audio-sample-rates"
+                elif a.audio_samplerate in self.settings.audio_samplerates:
+                    asample = a.audio_samplerate
 
             # Bitrate calculations/overrides
             if self.settings.abitrate == 0:
